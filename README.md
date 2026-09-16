@@ -106,16 +106,8 @@ pnpm preview     # serve the production build locally
 
 3. **Drizzle ORM for schema definition only** — Drizzle is used to define the database schema and generate migrations (via `drizzle-kit`). Runtime queries go through the Supabase JS client instead of Drizzle's query builder, since the app communicates with Supabase over HTTP rather than a direct database connection.
 
-4. **Hardcoded Supabase credentials** — The Supabase URL and publishable (anon) key are committed directly in the source. This is acceptable for a test/assessment project. In a production setting these would be extracted into environment variables (`.env`) and the `.env` file would be added to `.gitignore`.
+4. **Client-side validation only** — Form inputs are validated with Zod schemas before being sent to Supabase. I've also enforced proper typings to the data returned from the database using Zod's infer and refined types. This eliminates the need for server-side validation middleware, which is a reasonable trade-off given that Supabase enforces column constraints at the database level.
 
-5. **Tailwind CSS 4 with custom design tokens** — The UI follows a glassmorphism aesthetic using custom CSS variables (`--glass-*`, `--accent-blue`, etc.) layered on top of Tailwind. This gives the app a polished, modern look without an external component library theme.
+5. **No authentication** — The app does not implement user login for now. Ideally, tasks should be associated with a particular user, but all tasks are globally visible for now. Adding Supabase Auth and RLS policies would be the recommended approach for a multi-user deployment.
 
-6. **Client-side validation only** — Form inputs are validated with Zod schemas before being sent to Supabase. There is no server-side validation middleware, which is a reasonable trade-off given that Supabase enforces column constraints at the database level.
 
-7. **pnpm as the package manager** — The lockfile (`pnpm-lock.yaml`) and workspace config assume pnpm. Using npm or yarn will work for installs but may produce a different dependency tree.
-
-8. **No authentication** — The app does not implement user login or row-level security. All tasks are globally visible. Adding Supabase Auth and RLS policies would be the recommended approach for a multi-user deployment.
-
-## License
-
-This project was created as a technical assessment exercise.
